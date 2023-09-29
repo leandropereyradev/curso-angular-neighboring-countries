@@ -17,7 +17,7 @@ export class SelectorPageComponent implements OnInit {
   });
 
   public countriesByRegion: SmallCountry[] = [];
-  public borders: string[] = [];
+  public borders: SmallCountry[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -62,10 +62,15 @@ export class SelectorPageComponent implements OnInit {
         filter((value: string) => value.length > 0),
         switchMap((alphaCode) =>
           this.countriesService.getCountryByAlphaCode(alphaCode)
+        ),
+        switchMap((country) =>
+          this.countriesService.getCountriesBordersNameByAlphaCode(
+            country.borders
+          )
         )
       )
-      .subscribe((country) => {
-        this.borders = country.borders;
+      .subscribe((countries) => {
+        this.borders = countries;
       });
   }
 }
